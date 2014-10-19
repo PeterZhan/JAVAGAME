@@ -90,13 +90,77 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 		ctx.writeAndFlush(response);
 
-		ArrayList al = gl.getAllWaiting();
+		//ArrayList al = gl.getAllWaiting();
 
-		response = al.toString();
+	//	response = al.toString();
 
-		ctx.writeAndFlush(response + "\n");
+		//ctx.writeAndFlush(response + "\n");
 
 	}
+	
+	public void Move(ChannelHandlerContext ctx, String[] request) {
+		String gameid = request[1];
+		Position newP = null;
+		
+		
+        int direction = Integer.parseInt(request[2]);
+        String response = "";
+        
+        switch(direction)
+        {
+        
+        case 37:
+        	newP = gl.move(gameid, ctx.channel(), -AGameSession.step, 0);
+        	
+        	
+        	
+        	
+        	
+        	break;
+        	
+        case 38: 
+        	
+        	newP = gl.move(gameid, ctx.channel(), 0, -AGameSession.step);
+        	break;
+        	
+        	
+        case 39:
+        	
+        	newP = gl.move(gameid, ctx.channel(), AGameSession.step, 0);
+        	break;
+        	
+        
+        case 40:
+        	
+        	newP = gl.move(gameid, ctx.channel(), 0, AGameSession.step);
+        	break;	
+        	
+        	
+        default:     
+        
+        
+        
+        }
+		
+		if (newP != null){
+		
+		   response = "POSITION:" + newP.getX()+"," + newP.getY() + "\n";
+		   System.out.println(response);
+		
+
+		   ctx.writeAndFlush(response);
+		   
+		}
+
+		//ArrayList al = gl.getAllWaiting();
+
+	//	response = al.toString();
+
+		//ctx.writeAndFlush(response + "\n");
+
+	}
+	
+	
 	
 	public void QuitGame(ChannelHandlerContext ctx, String[] request)
 	{
@@ -162,7 +226,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 		if (cmd.equals("MOVE")) {
 
-			// Move(ctx, request);
+			 Move(ctx, request);
 
 		}
 		

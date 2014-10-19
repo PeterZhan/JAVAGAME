@@ -163,6 +163,19 @@ public class GameList {
 		
 	}
 	
+	public synchronized Position move(String gameid, Channel ch, int xstep, int ystep)
+	{
+		AGameSession game = GameListByID.get(gameid);
+		Position p = null;
+		if (game != null)
+		{
+			p = game.Move(ch, xstep, ystep);
+				
+		}
+		
+		return p;
+	}
+	
 	
 
 }
