@@ -1,5 +1,6 @@
 package ibm.game.server;
 import java.util.*;
+
 import io.netty.channel.Channel;
 
 public class AGameSession {
@@ -10,6 +11,7 @@ public class AGameSession {
 	final static Constraint cons1= new Constraint(5,50,200,800);
 	final static Constraint cons2= new Constraint(1205,50,1395,800);
 	final static int step = 20;
+	final static int rotate = 10;
 		
 	final String gameid;
 	
@@ -18,6 +20,9 @@ public class AGameSession {
 	
 	Position P1 = new Position();
 	Position P2 = new Position();
+	
+	int angle1 = 0;
+	int angle2 = 180;
 	
 	
 	public Channel getC1() {
@@ -67,10 +72,27 @@ public class AGameSession {
 		
 	}
 	
-	public Position Move(Channel ch, int stepx, int stepy)
+	public int getCurAngle(Channel ch)
 	{
 		if (ch == c1)
 		{
+			return angle1;
+		}
+		
+		if (ch == c2){
+			return angle2;
+		}
+		
+		return 0;
+		
+	}
+	
+	public Position Move(Channel ch, int distance)
+	{
+		if (ch == c1)
+		{
+			int stepx = (int) (distance * Math.cos(angle1 * Math.PI / 180.0));
+		    int stepy = (int) (distance * Math.sin(angle1 * Math.PI / 180.0));		
 			if (cons1.inside(P1.getX()+stepx, P1.getY()+stepy))
 			{
 				
@@ -91,6 +113,8 @@ public class AGameSession {
 		
 		if (ch == c2)
 		{
+			int stepx = (int) (distance * Math.cos(angle2 * Math.PI / 180.0));
+		    int stepy = (int) (distance * Math.sin(angle2 * Math.PI / 180.0));		
 			if (cons2.inside(P2.getX()+stepx, P2.getY()+stepy))
 			{
 				P2.XStep(stepx);
@@ -106,6 +130,29 @@ public class AGameSession {
 		
 		
 		return null;
+		
+	}
+	
+	public int rotate(Channel ch, int r)
+	{
+		if (ch == c1)
+		{
+			return angle1+r;
+			
+			
+			
+			
+		}
+		
+		
+		if (ch == c2)
+		{
+			return angle2+r;
+			
+		}
+		
+		
+		return 0;
 		
 	}
 	

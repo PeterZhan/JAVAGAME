@@ -80,12 +80,16 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 			Constraint cons1 = AGameSession.cons1;
 			Constraint cons2 = AGameSession.cons2;
+			
+			int an1 = gl.getAngleByID(gameid, ctx.channel());
+		//	int an2 = AGameSession.angle2;
+			
 
 			response = "NEW:" + gameid + ":" + width + "," + height + ":"
 					+ cons1.getX0() + "," + cons1.getY0() + "," + cons1.getX1()
 					+ "," + cons1.getY1() + "," + cons2.getX0() + ","
 					+ cons2.getY0() + "," + cons2.getX1() + "," + cons2.getY1()
-					+ ":" + p.getX() + "," + p.getY() + "\n";
+					+ ":" + p.getX() + "," + p.getY() + ":" + an1 + "\n";
 		}
 
 		ctx.writeAndFlush(response);
@@ -101,6 +105,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 	public void Move(ChannelHandlerContext ctx, String[] request) {
 		String gameid = request[1];
 		Position newP = null;
+		int newAngle = -1;
 		
 		
         int direction = Integer.parseInt(request[2]);
@@ -110,7 +115,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
         {
         
         case 37:
-        	newP = gl.move(gameid, ctx.channel(), -AGameSession.step, 0);
+        	newAngle = gl.rotate(gameid, ctx.channel(), -AGameSession.rotate);
         	
         	
         	
@@ -120,19 +125,19 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
         	
         case 38: 
         	
-        	newP = gl.move(gameid, ctx.channel(), 0, -AGameSession.step);
+        	newP = gl.move(gameid, ctx.channel(), AGameSession.step);
         	break;
         	
         	
         case 39:
         	
-        	newP = gl.move(gameid, ctx.channel(), AGameSession.step, 0);
+        	newAngle = gl.rotate(gameid, ctx.channel(), AGameSession.rotate);
         	break;
         	
         
         case 40:
         	
-        	newP = gl.move(gameid, ctx.channel(), 0, AGameSession.step);
+        	newP = gl.move(gameid, ctx.channel(), -AGameSession.step);
         	break;	
         	
         	
@@ -151,6 +156,17 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		   ctx.writeAndFlush(response);
 		   
 		}
+		
+		if (newAngle != -1){
+			
+			   response = "ANGLE:" + newAngle + "\n";
+			   System.out.println(response);
+			
+
+			   ctx.writeAndFlush(response);
+			   
+			}
+
 
 		//ArrayList al = gl.getAllWaiting();
 

@@ -56,6 +56,17 @@ public class GameList {
 		
 	}
 	
+	public synchronized int getAngleByID(String gameid, Channel ch) 
+	{
+		
+		AGameSession game = GameListByID.get(gameid);
+		
+		
+		return game.getCurAngle(ch);
+		
+		
+	}
+	
 	public synchronized Position getPositionByChannel(Channel ch) 
 	{
 		
@@ -163,19 +174,30 @@ public class GameList {
 		
 	}
 	
-	public synchronized Position move(String gameid, Channel ch, int xstep, int ystep)
+	public synchronized Position move(String gameid, Channel ch, int distance)
 	{
 		AGameSession game = GameListByID.get(gameid);
 		Position p = null;
 		if (game != null)
 		{
-			p = game.Move(ch, xstep, ystep);
+			p = game.Move(ch, distance);
 				
 		}
 		
 		return p;
 	}
 	
-	
+	public synchronized int rotate(String gameid, Channel ch, int r)
+	{
+		AGameSession game = GameListByID.get(gameid);
+		
+		if (game != null)
+		{
+			return game.rotate(ch, r);
+				
+		}
+		
+		return 0;
+	}
 
 }
