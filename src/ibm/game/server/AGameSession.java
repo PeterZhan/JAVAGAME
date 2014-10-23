@@ -6,11 +6,11 @@ import io.netty.channel.Channel;
 public class AGameSession {
     	
 	static Random rd = new Random();
-	final static int width = 1400;
-	final static int height = 850;
-	final static Constraint cons1= new Constraint(5,50,200,800);
-	final static Constraint cons2= new Constraint(1205,50,1395,800);
-	final static int step = 20;
+	final static int width = 1200;
+	final static int height = 600;
+	final static Constraint cons1= new Constraint(10,10,500,595);
+	final static Constraint cons2= new Constraint(610,10,1190,590);
+	final static int step = 3;
 	final static int rotate = 10;
 		
 	final String gameid;
