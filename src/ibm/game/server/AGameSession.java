@@ -137,17 +137,18 @@ public class AGameSession {
 	{
 		if (ch == c1)
 		{
-			return angle1+r;
+			 angle1 += r;
 			
 			
-			
+			 return angle1;
 			
 		}
 		
 		
 		if (ch == c2)
 		{
-			return angle2+r;
+			angle2 += r;
+			return angle2;
 			
 		}
 		
