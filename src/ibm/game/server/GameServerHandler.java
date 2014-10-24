@@ -30,10 +30,22 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		// Once session is secured, send a greeting and register the channel to
 		// the global channel
 		// list so the channel received the messages from others.
-
-		ctx.writeAndFlush("Welcome to "
-				+ InetAddress.getLocalHost().getHostName()
-				+ " Gamet service!\n");
+        ArrayList al = gl.getAllWaiting();
+        String response = "GL:";
+        
+        if (al.size() > 0)
+        {
+          for(int i=0; i<al.size()-1; i++)
+          {
+             response += al.get(i) + ",";	
+          }
+        
+          response += al.get(al.size()-1);
+        }
+         response += "\n";
+        
+        
+		ctx.writeAndFlush(response);
 
 		// channels.add(ctx.channel());
 
@@ -107,6 +119,12 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		Position newP = null;
 		int newAngle = -1;
 		
+		Channel ch = ctx.channel();
+		int id = 1;
+		
+	    id = gl.getPartNum(gameid, ch);
+		
+		
 		
         int direction = Integer.parseInt(request[2]);
         String response = "";
@@ -149,7 +167,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		
 		if (newP != null){
 		
-		   response = "POSITION:" + newP.getX()+"," + newP.getY() + "\n";
+		   response = "POSITION:" + newP.getX()+"," + newP.getY() + ":" + id + "\n";
 		   System.out.println(response);
 		
 
@@ -159,7 +177,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		
 		if (newAngle != -1){
 			
-			   response = "ANGLE:" + newAngle + "\n";
+			   response = "ANGLE:" + newAngle  + ":" + id + "\n";
 			   System.out.println(response);
 			
 

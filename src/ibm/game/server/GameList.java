@@ -199,5 +199,18 @@ public class GameList {
 		
 		return 0;
 	}
+	
+	public synchronized int getPartNum(String gameid, Channel ch)
+	{
+		AGameSession game = GameListByID.get(gameid);
+		
+		if (game != null)
+		{
+			return game.getGamePart(ch);
+				
+		}
+		
+		return 0;
+	}
 
 }

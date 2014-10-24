@@ -12,6 +12,8 @@ public class AGameSession {
 	final static Constraint cons2= new Constraint(610,10,1080,590);
 	final static int step = 3;
 	final static int rotate = 10;
+	
+
 		
 	final String gameid;
 	
@@ -155,6 +157,25 @@ public class AGameSession {
 		
 		return 0;
 		
+	}
+	
+	public int getGamePart(Channel ch)
+	{
+		if (ch == c1)
+		{
+			 return 1;
+			
+		}
+		
+		
+		if (ch == c2)
+		{
+			
+			return 2;
+			
+		}
+		
+		return 0;
 	}
 	
 	
