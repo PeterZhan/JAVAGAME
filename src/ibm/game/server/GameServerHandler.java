@@ -30,21 +30,18 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		// Once session is secured, send a greeting and register the channel to
 		// the global channel
 		// list so the channel received the messages from others.
-        ArrayList al = gl.getAllWaiting();
-        String response = "GL:";
-        
-        if (al.size() > 0)
-        {
-          for(int i=0; i<al.size()-1; i++)
-          {
-             response += al.get(i) + ",";	
-          }
-        
-          response += al.get(al.size()-1);
-        }
-         response += "\n";
-        
-        
+		ArrayList al = gl.getAllWaiting();
+		String response = "GL:";
+
+		if (al.size() > 0) {
+			for (int i = 0; i < al.size() - 1; i++) {
+				response += al.get(i) + ",";
+			}
+
+			response += al.get(al.size() - 1);
+		}
+		response += "\n";
+
 		ctx.writeAndFlush(response);
 
 		// channels.add(ctx.channel());
@@ -92,10 +89,9 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 			Constraint cons1 = AGameSession.cons1;
 			Constraint cons2 = AGameSession.cons2;
-			
+
 			int an1 = gl.getAngleByID(gameid, ctx.channel());
-		//	int an2 = AGameSession.angle2;
-			
+			// int an2 = AGameSession.angle2;
 
 			response = "NEW:" + gameid + ":" + width + "," + height + ":"
 					+ cons1.getX0() + "," + cons1.getY0() + "," + cons1.getX1()
@@ -106,99 +102,82 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 		ctx.writeAndFlush(response);
 
-		//ArrayList al = gl.getAllWaiting();
+		// ArrayList al = gl.getAllWaiting();
 
-	//	response = al.toString();
+		// response = al.toString();
 
-		//ctx.writeAndFlush(response + "\n");
+		// ctx.writeAndFlush(response + "\n");
 
 	}
-	
+
 	public void Move(ChannelHandlerContext ctx, String[] request) {
 		String gameid = request[1];
 		Position newP = null;
 		int newAngle = -1;
-		
+
 		Channel ch = ctx.channel();
 		int id = 1;
-		
-	    id = gl.getPartNum(gameid, ch);
-		
-		
-		
-        int direction = Integer.parseInt(request[2]);
-        String response = "";
-        
-        switch(direction)
-        {
-        
-        case 37:
-        	newAngle = gl.rotate(gameid, ctx.channel(), -AGameSession.rotate);
-        	
-        	
-        	
-        	
-        	
-        	break;
-        	
-        case 38: 
-        	
-        	newP = gl.move(gameid, ctx.channel(), AGameSession.step);
-        	break;
-        	
-        	
-        case 39:
-        	
-        	newAngle = gl.rotate(gameid, ctx.channel(), AGameSession.rotate);
-        	break;
-        	
-        
-        case 40:
-        	
-        	newP = gl.move(gameid, ctx.channel(), -AGameSession.step);
-        	break;	
-        	
-        	
-        default:     
-        
-        
-        
-        }
-		
-		if (newP != null){
-		
-		   response = "POSITION:" + newP.getX()+"," + newP.getY() + ":" + id + "\n";
-		   System.out.println(response);
-		
 
-		   ctx.writeAndFlush(response);
-		   
+		id = gl.getPartNum(gameid, ch);
+
+		int direction = Integer.parseInt(request[2]);
+		String response = "";
+
+		switch (direction) {
+
+		case 37:
+			newAngle = gl.rotate(gameid, ctx.channel(), -AGameSession.rotate);
+
+			break;
+
+		case 38:
+
+			newP = gl.move(gameid, ctx.channel(), AGameSession.step);
+			break;
+
+		case 39:
+
+			newAngle = gl.rotate(gameid, ctx.channel(), AGameSession.rotate);
+			break;
+
+		case 40:
+
+			newP = gl.move(gameid, ctx.channel(), -AGameSession.step);
+			break;
+
+		default:
+
 		}
-		
-		if (newAngle != -1){
-			
-			   response = "ANGLE:" + newAngle  + ":" + id + "\n";
-			   System.out.println(response);
-			
 
-			   ctx.writeAndFlush(response);
-			   
-			}
+		if (newP != null) {
 
+			response = "POSITION:" + newP.getX() + "," + newP.getY() + ":" + id
+					+ "\n";
+			System.out.println(response);
 
-		//ArrayList al = gl.getAllWaiting();
+			ctx.writeAndFlush(response);
 
-	//	response = al.toString();
+		}
 
-		//ctx.writeAndFlush(response + "\n");
+		if (newAngle != -1) {
+
+			response = "ANGLE:" + newAngle + ":" + id + "\n";
+			System.out.println(response);
+
+			ctx.writeAndFlush(response);
+
+		}
+
+		// ArrayList al = gl.getAllWaiting();
+
+		// response = al.toString();
+
+		// ctx.writeAndFlush(response + "\n");
 
 	}
-	
-	
-	
-	public void QuitGame(ChannelHandlerContext ctx, String[] request)
-	{
-		
+
+	public void QuitGame(ChannelHandlerContext ctx, String[] request) {
+
 		Channel ch = ctx.channel();
 
 		if (gl.isMainPlayer(ch)) {
@@ -207,20 +186,17 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		} else {
 			gl.setNullSecond(ch);
 		}
-		
+
 		ctx.close();
 	}
-	
-	public void JoinGame(ChannelHandlerContext ctx, String[] request)
-	{
-		
+
+	public void JoinGame(ChannelHandlerContext ctx, String[] request) {
+
 		Channel ch = ctx.channel();
 		String gameid = request[1];
 		String response = "FAIL:JOIN\n";
-		if (gl.JoinAGame(gameid, ch) != null)
-		{
-			
-			
+		if (gl.JoinAGame(gameid, ch) != null) {
+
 			int width = AGameSession.width;
 			int height = AGameSession.height;
 
@@ -229,18 +205,15 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 			Constraint cons1 = AGameSession.cons1;
 			Constraint cons2 = AGameSession.cons2;
 
-				response = "NEWJOIN:" + gameid + ":" + width + "," + height + ":"
-						+ cons1.getX0() + "," + cons1.getY0() + "," + cons1.getX1()
-						+ "," + cons1.getY1() + "," + cons2.getX0() + ","
-						+ cons2.getY0() + "," + cons2.getX1() + "," + cons2.getY1()
-						+ ":" + p.getX() + "," + p.getY() + "\n";
-			}
+			response = "NEWJOIN:" + gameid + ":" + width + "," + height + ":"
+					+ cons1.getX0() + "," + cons1.getY0() + "," + cons1.getX1()
+					+ "," + cons1.getY1() + "," + cons2.getX0() + ","
+					+ cons2.getY0() + "," + cons2.getX1() + "," + cons2.getY1()
+					+ ":" + p.getX() + "," + p.getY() + "\n";
+		}
 
-			ctx.writeAndFlush(response);
-			
-			
-		
-		
+		ctx.writeAndFlush(response);
+
 	}
 
 	@Override
@@ -248,7 +221,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 			throws Exception {
 
 		System.out.println(msg);
-		
+
 		String[] request = msg.split(":");
 		String cmd = request[0];
 
@@ -260,22 +233,21 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 		if (cmd.equals("MOVE")) {
 
-			 Move(ctx, request);
+			Move(ctx, request);
 
 		}
-		
+
 		if (cmd.equals("QUIT")) {
 
 			QuitGame(ctx, request);
 
 		}
-		
+
 		if (cmd.equals("JOIN")) {
 
 			JoinGame(ctx, request);
 
 		}
-		
 
 		// Send the received message to all channels but the current one.
 
