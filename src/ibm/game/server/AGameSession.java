@@ -6,10 +6,10 @@ import io.netty.channel.Channel;
 public class AGameSession {
     	
 	static Random rd = new Random();
-	final static int width = 1200;
-	final static int height = 600;
-	final static Constraint cons1= new Constraint(10,10,500,595);
-	final static Constraint cons2= new Constraint(610,10,1190,590);
+	final static int width = 1100;
+	final static int height = 630;
+	final static Constraint cons1= new Constraint(10,10,500,590);
+	final static Constraint cons2= new Constraint(610,10,1080,590);
 	final static int step = 3;
 	final static int rotate = 10;
 		
@@ -91,8 +91,8 @@ public class AGameSession {
 	{
 		if (ch == c1)
 		{
-			int stepx = (int) (distance * Math.cos(angle1 * Math.PI / 180.0));
-		    int stepy = (int) (distance * Math.sin(angle1 * Math.PI / 180.0));		
+			int stepx = (int) Math.round(distance * Math.cos(angle1 * Math.PI / 180.0));
+		    int stepy = (int) Math.round(distance * Math.sin(angle1 * Math.PI / 180.0));		
 			if (cons1.inside(P1.getX()+stepx, P1.getY()+stepy))
 			{
 				
@@ -113,8 +113,8 @@ public class AGameSession {
 		
 		if (ch == c2)
 		{
-			int stepx = (int) (distance * Math.cos(angle2 * Math.PI / 180.0));
-		    int stepy = (int) (distance * Math.sin(angle2 * Math.PI / 180.0));		
+			int stepx = (int) Math.round(distance * Math.cos(angle2 * Math.PI / 180.0));
+		    int stepy = (int) Math.round(distance * Math.sin(angle2 * Math.PI / 180.0));		
 			if (cons2.inside(P2.getX()+stepx, P2.getY()+stepy))
 			{
 				P2.XStep(stepx);
