@@ -3,6 +3,9 @@ package ibm.game.server;
 import java.util.*;
 
 import io.netty.channel.Channel;
+import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.DefaultChannelGroup;
+import io.netty.util.concurrent.GlobalEventExecutor;
 
 public class AGameSession {
 
@@ -24,6 +27,9 @@ public class AGameSession {
 
 	int angle1 = 0;
 	int angle2 = 180;
+	
+	
+	final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
 	public Channel getC1() {
 		return c1;
@@ -31,6 +37,7 @@ public class AGameSession {
 
 	public void setC1(Channel c1) {
 		this.c1 = c1;
+		channels.add(c1);
 	}
 
 	public Channel getC2() {
@@ -39,6 +46,7 @@ public class AGameSession {
 
 	public void setC2(Channel c2) {
 		this.c2 = c2;
+		channels.add(c2);
 	}
 
 	public String getGameid() {
@@ -152,5 +160,20 @@ public class AGameSession {
 
 		return 0;
 	}
+	
+	public int sendBothMessage(String msg)
+	{
+		for (Channel c: channels) {
+            
+			    System.out.println("Sending message " + msg + " to " + c.toString());
+			
+                c.writeAndFlush(msg);
+            
+        }	
+		
+		return 0;
+	}
+	
+	
 
 }

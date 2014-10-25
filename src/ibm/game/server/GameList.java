@@ -16,6 +16,7 @@ public class GameList {
 		GameListByID.put(game.getGameid(), game);
 		GameListByCH1.put(ch, game);
 		game.setC1(ch);
+		
 
 		return game.getGameid();
 
@@ -114,6 +115,7 @@ public class GameList {
 		if (game != null) {
 			GameListByCH2.remove(ch);
 			game.setC2(null);
+			game.channels.remove(ch);
 
 		}
 
@@ -171,5 +173,45 @@ public class GameList {
 
 		return 0;
 	}
+	
+	public synchronized int sendMessageForTwo(String gameid, String msg) {
+		AGameSession game = GameListByID.get(gameid);
+
+		if (game != null) {
+			return game.sendBothMessage(msg);
+
+		}
+
+		return 0;
+	}
+	
+	public synchronized Position getMainPostion(String gameid)
+	{
+		AGameSession game = GameListByID.get(gameid);
+		
+		if (game != null)
+		{
+			return game.P1;
+		}
+		
+		return null;
+		
+	}
+	
+	public synchronized int getMainAngle(String gameid)
+	{
+		AGameSession game = GameListByID.get(gameid);
+		
+		if (game != null)
+		{
+			return game.angle1;
+			
+		}
+			
+		return 0;
+		
+		
+	}
+	
 
 }

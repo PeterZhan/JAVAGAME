@@ -155,7 +155,8 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 					+ "\n";
 			System.out.println(response);
 
-			ctx.writeAndFlush(response);
+			//ctx.writeAndFlush(response);
+			gl.sendMessageForTwo(gameid, response);
 
 		}
 
@@ -164,7 +165,8 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 			response = "ANGLE:" + newAngle + ":" + id + "\n";
 			System.out.println(response);
 
-			ctx.writeAndFlush(response);
+			gl.sendMessageForTwo(gameid, response);
+			//ctx.writeAndFlush(response);
 
 		}
 
@@ -209,10 +211,49 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 					+ cons1.getX0() + "," + cons1.getY0() + "," + cons1.getX1()
 					+ "," + cons1.getY1() + "," + cons2.getX0() + ","
 					+ cons2.getY0() + "," + cons2.getX1() + "," + cons2.getY1()
-					+ ":" + p.getX() + "," + p.getY() + "\n";
+					+ ":" + p.getX() + "," + p.getY() + ":2\n";
+			
+			
+			
+			
+			gl.sendMessageForTwo(gameid, response);
+			
+			Position newP = gl.getMainPostion(gameid);
+			
+			if (newP != null) {
+
+				response = "POSITION:" + newP.getX() + "," + newP.getY() + ":1" 
+						+ "\n";
+				System.out.println(response);
+
+				ctx.writeAndFlush(response);
+			//	gl.sendMessageForTwo(gameid, response);
+
+			}
+			
+			int newAngle = gl.getMainAngle(gameid);
+
+			if (newAngle != -1) {
+
+				response = "ANGLE:" + newAngle + ":1" + "\n";
+				System.out.println(response);
+
+				//gl.sendMessageForTwo(gameid, response);
+				ctx.writeAndFlush(response);
+
+			}
+			
+			
+			
+			
+			
+			
+			
+			
 		}
 
-		ctx.writeAndFlush(response);
+
+        
 
 	}
 
