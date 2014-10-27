@@ -131,13 +131,14 @@ public class AGameSession {
 	public int rotate(Channel ch, int r) {
 		if (ch == c1) {
 			angle1 += r;
-
+            angle1 %= 360;
 			return angle1;
 
 		}
 
 		if (ch == c2) {
 			angle2 += r;
+			angle2 %= 360;
 			return angle2;
 
 		}
@@ -172,6 +173,127 @@ public class AGameSession {
         }	
 		
 		return 0;
+	}
+	
+	public fireInfo fire(Channel ch){
+		
+		fireInfo fi = null;
+		
+		if (ch == c1) {
+			
+			
+			fi.x0 = P1.x + (int) Math.round(21
+					* Math.cos(angle1 * Math.PI / 180.0));
+		    fi.y0 = P1.y + (int) Math.round(21
+					* Math.sin(angle1 * Math.PI / 180.0));
+			
+			if ((angle1 >= 90 && angle1 <= 270) || (angle1 <= -90 && angle1 >= -270))
+			{
+			   
+				
+			}else
+			{
+				
+			   shoot(1, fi);
+				
+				
+				
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+
+		}
+
+		if (ch == c2) {
+			
+			fi.x0 = P2.x + (int) Math.round(21
+					* Math.cos(angle2 * Math.PI / 180.0));
+		    fi.y0 = P2.y + (int) Math.round(21
+					* Math.sin(angle2 * Math.PI / 180.0));
+			
+			if ((angle2 <= 90 && angle2 >=-90) || angle2 <= -270 || angle2 >= 270)
+			{
+			   
+				
+			}else
+			{
+				
+				
+				shoot(2, fi);
+				
+				
+				
+			}
+			
+			
+			
+			
+
+		}
+		
+		return fi;
+		
+		
+	}
+	
+	
+	public void shoot(int part, fireInfo fi)
+	{
+		
+		if (part == 1)
+		{
+			
+			distance(fi, angle1, P2);
+			
+			
+			
+			
+		}
+		
+		
+		if (part == 2)
+		{
+			
+			distance(fi, angle2, P1);
+			
+			
+			
+			
+		}
+		
+		
+	}
+	
+	
+	public void distance(fireInfo fi, int angle, Position target)
+	{
+		//double d = Math.sqrt((target.x - fi.x0)*(target.x - fi.x0) +
+		//		          (target.y - fi.y0)*(target.y - fi.y0));
+		
+		double ra = angle/180.0 * Math.PI;
+		
+		double a = Math.sin(ra);
+		double b = -Math.cos(ra);
+		double c= fi.y0 * Math.cos(ra) - fi.x0 * Math.sin(ra);
+		
+		double d = Math.abs(a*target.x + b*target.y + c) / Math.sqrt(a*a + b*b);
+		
+		
+		if (d<=21)
+		{
+			fi.targeted = true;
+			
+		
+		
+		}
+		
+		
 	}
 	
 	

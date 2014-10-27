@@ -213,5 +213,16 @@ public class GameList {
 		
 	}
 	
+	public synchronized fireInfo fire(String gameid, Channel ch) {
+		AGameSession game = GameListByID.get(gameid);
+
+		if (game != null) {
+			return game.fire(ch);
+
+		}
+
+		return null;
+	}
+	
 
 }

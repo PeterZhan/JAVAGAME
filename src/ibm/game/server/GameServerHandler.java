@@ -1,4 +1,4 @@
-package ibm.game.server;
+    package ibm.game.server;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -114,6 +114,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		String gameid = request[1];
 		Position newP = null;
 		int newAngle = -1;
+		fireInfo fi = null;
 
 		Channel ch = ctx.channel();
 		int id = 1;
@@ -144,6 +145,12 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 			newP = gl.move(gameid, ctx.channel(), -AGameSession.step);
 			break;
+			
+		case 32:
+
+			fi = gl.fire(gameid, ctx.channel());
+			break;		
+			
 
 		default:
 
