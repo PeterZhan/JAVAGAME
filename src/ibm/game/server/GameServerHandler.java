@@ -176,6 +176,33 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 			//ctx.writeAndFlush(response);
 
 		}
+		
+		if (fi != null)
+		{
+			
+			response = "FIRE:" + fi.x0 + "," + fi.y0 + "," + fi.x1 + "," + fi.y1 + ":" + fi.targeted + "\n";
+			gl.sendMessageForTwo(gameid, response);
+			
+			if (fi.targeted){
+				
+				 if (fi.part == 1)
+				 {
+					 response = "SCORE:" + fi.fule + ":2\n";
+					 gl.sendMessageForTwo(gameid, response);
+				 }
+				
+				 if (fi.part == 2)
+				 {
+					 response = "SCORE:" + fi.fule + ":1\n";
+					 gl.sendMessageForTwo(gameid, response);
+				 }
+				
+				
+			}
+			
+			
+			
+		}
 
 		// ArrayList al = gl.getAllWaiting();
 

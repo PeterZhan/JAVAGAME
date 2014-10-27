@@ -29,6 +29,10 @@ public class AGameSession {
 	int angle2 = 180;
 	
 	
+	int fuel1 = 10;
+	int fuel2 = 10;
+	
+	
 	final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
 	public Channel getC1() {
@@ -181,7 +185,8 @@ public class AGameSession {
 		
 		if (ch == c1) {
 			
-			
+			fi = new fireInfo();
+			fi.part = 1;
 			fi.x0 = P1.x + (int) Math.round(21
 					* Math.cos(angle1 * Math.PI / 180.0));
 		    fi.y0 = P1.y + (int) Math.round(21
@@ -196,9 +201,13 @@ public class AGameSession {
 				
 			   shoot(1, fi);
 				
+			   if (fi.targeted)
+			   {
+				   fuel2 --;
+				   fi.fule = fuel2;
+			   }
 				
-				
-				
+				  
 			}
 			
 			
@@ -212,6 +221,8 @@ public class AGameSession {
 
 		if (ch == c2) {
 			
+			fi = new fireInfo();
+			fi.part = 2;
 			fi.x0 = P2.x + (int) Math.round(21
 					* Math.cos(angle2 * Math.PI / 180.0));
 		    fi.y0 = P2.y + (int) Math.round(21
@@ -227,7 +238,11 @@ public class AGameSession {
 				
 				shoot(2, fi);
 				
-				
+				if (fi.targeted)
+				{
+					   fuel1 --;
+					   fi.fule = fuel1;
+				}
 				
 			}
 			
@@ -243,6 +258,22 @@ public class AGameSession {
 	}
 	
 	
+	public int getFuel1() {
+		return fuel1;
+	}
+
+	public void setFuel1(int fuel1) {
+		this.fuel1 = fuel1;
+	}
+
+	public int getFuel2() {
+		return fuel2;
+	}
+
+	public void setFuel2(int fuel2) {
+		this.fuel2 = fuel2;
+	}
+
 	public void shoot(int part, fireInfo fi)
 	{
 		
@@ -288,7 +319,8 @@ public class AGameSession {
 		if (d<=21)
 		{
 			fi.targeted = true;
-			
+			fi.x1 =(int) Math.round((-b*b*c -a*b*b*fi.x0-a*a*b*fi.y0)/(a*a- b*b)/a - c/a);
+			fi.y1 =(int) Math.round((b*c + a*b*fi.x0 + a * a * fi.y0)/(a*a - b*b)); 
 		
 		
 		}
