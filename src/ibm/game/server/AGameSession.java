@@ -191,6 +191,14 @@ public class AGameSession {
 					* Math.cos(angle1 * Math.PI / 180.0));
 		    fi.y0 = P1.y + (int) Math.round(21
 					* Math.sin(angle1 * Math.PI / 180.0));
+		    
+		    
+		 
+		    double ra = angle1/180.0 * Math.PI;
+		    fi.x1 = (int)Math.round(fi.x0 + (1200) * Math.cos(ra));
+		    fi.y1 = (int)Math.round(fi.y0 + (1200) * Math.sin(ra));
+			
+		    
 			
 			if ((angle1 >= 90 && angle1 <= 270) || (angle1 <= -90 && angle1 >= -270))
 			{
@@ -227,6 +235,13 @@ public class AGameSession {
 					* Math.cos(angle2 * Math.PI / 180.0));
 		    fi.y0 = P2.y + (int) Math.round(21
 					* Math.sin(angle2 * Math.PI / 180.0));
+		    
+		    
+		    
+		    
+		    double ra = angle2/180.0 * Math.PI;
+		    fi.x1 = (int)Math.round(fi.x0 + (1200) * Math.cos(ra));
+		    fi.y1 = (int)Math.round(fi.y0 + (1200) * Math.sin(ra));
 			
 			if ((angle2 <= 90 && angle2 >=-90) || angle2 <= -270 || angle2 >= 270)
 			{
@@ -319,8 +334,8 @@ public class AGameSession {
 		if (d<=21)
 		{
 			fi.targeted = true;
-			fi.x1 =(int) Math.round((-b*b*c -a*b*b*fi.x0-a*a*b*fi.y0)/(a*a- b*b)/a - c/a);
-			fi.y1 =(int) Math.round((b*c + a*b*fi.x0 + a * a * fi.y0)/(a*a - b*b)); 
+			fi.x1 = target.x; //(int) Math.round((-b*b*c -a*b*b*fi.x0-a*a*b*fi.y0)/(a*a- b*b)/a - c/a);
+			fi.y1 = target.y; //(int) Math.round((b*c + a*b*fi.x0 + a * a * fi.y0)/(a*a - b*b)); 
 		
 		
 		}

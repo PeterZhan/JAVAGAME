@@ -180,7 +180,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		if (fi != null)
 		{
 			
-			response = "FIRE:" + fi.x0 + "," + fi.y0 + "," + fi.x1 + "," + fi.y1 + ":" + fi.targeted + "\n";
+			response = "FIRE:" + fi.x0 + "," + fi.y0 + "," + fi.x1 + "," + fi.y1 + ":" + fi.targeted + ":" + fi.part + "\n";
 			gl.sendMessageForTwo(gameid, response);
 			
 			if (fi.targeted){
