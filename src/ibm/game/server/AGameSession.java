@@ -29,8 +29,8 @@ public class AGameSession {
 	int angle2 = 180;
 	
 	
-	int fuel1 = 10;
-	int fuel2 = 10;
+	int fuel1 = 30;
+	int fuel2 = 30;
 	
 	
 	final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
