@@ -183,7 +183,7 @@ public class AGameSession {
 		
 		fireInfo fi = null;
 		
-		if (ch == c1) {
+		if (ch == c1 ) {
 			
 			fi = new fireInfo();
 			fi.part = 1;
@@ -199,7 +199,8 @@ public class AGameSession {
 		    fi.y1 = (int)Math.round(fi.y0 + 5 + (1200) * Math.sin(ra));
 			
 		    
-			
+			if (c2 != null)
+			{
 			if ((angle1 >= 90 && angle1 <= 270) || (angle1 <= -90 && angle1 >= -270))
 			{
 			   
@@ -218,7 +219,7 @@ public class AGameSession {
 				  
 			}
 			
-			
+			}
 			
 			
 			
