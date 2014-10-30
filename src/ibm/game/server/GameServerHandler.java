@@ -240,12 +240,14 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 			Constraint cons1 = AGameSession.cons1;
 			Constraint cons2 = AGameSession.cons2;
+			
+			int angle2 = gl.getAngleByID(gameid, ctx.channel());
 
 			response = "NEWJOIN:" + gameid + ":" + width + "," + height + ":"
 					+ cons1.getX0() + "," + cons1.getY0() + "," + cons1.getX1()
 					+ "," + cons1.getY1() + "," + cons2.getX0() + ","
 					+ cons2.getY0() + "," + cons2.getX1() + "," + cons2.getY1()
-					+ ":" + p.getX() + "," + p.getY() + ":2\n";
+					+ ":" + p.getX() + "," + p.getY() + ":" + angle2+ ":2\n";
 			
 			
 			

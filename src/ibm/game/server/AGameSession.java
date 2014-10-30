@@ -12,8 +12,8 @@ public class AGameSession {
 	static Random rd = new Random();
 	final static int width = 1100;
 	final static int height = 630;
-	final static Constraint cons1 = new Constraint(10, 10, 500, 590);
-	final static Constraint cons2 = new Constraint(610, 10, 1080, 590);
+	final static Constraint cons1 = new Constraint(10, 10, 1090, 620);
+	final static Constraint cons2 = new Constraint(10, 10, 1090, 620);
 	final static int step = 3;
 	final static int rotate = 10;
 
@@ -93,6 +93,21 @@ public class AGameSession {
 		return 0;
 
 	}
+	
+	public boolean isCloseEnough(int x0, int y0, int x1, int y1)
+	{
+		
+		int d = 42;
+		
+		int distance = (int)Math.round((Math.sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0))));
+		
+		return distance <= d;
+		
+		
+		
+	}
+	
+	
 
 	public Position Move(Channel ch, int distance) {
 		if (ch == c1) {
@@ -100,7 +115,7 @@ public class AGameSession {
 					* Math.cos(angle1 * Math.PI / 180.0));
 			int stepy = (int) Math.round(distance
 					* Math.sin(angle1 * Math.PI / 180.0));
-			if (cons1.inside(P1.getX() + stepx, P1.getY() + stepy)) {
+			if (!isCloseEnough(P1.getX() + stepx, P1.getY() + stepy, P2.getX(), P2.getY())){//cons1.inside(P1.getX() + stepx, P1.getY() + stepy)) {
 
 				P1.XStep(stepx);
 				P1.YStep(stepy);
@@ -117,7 +132,7 @@ public class AGameSession {
 					* Math.cos(angle2 * Math.PI / 180.0));
 			int stepy = (int) Math.round(distance
 					* Math.sin(angle2 * Math.PI / 180.0));
-			if (cons2.inside(P2.getX() + stepx, P2.getY() + stepy)) {
+			if (!isCloseEnough(P2.getX() + stepx, P2.getY() + stepy, P1.getX(), P1.getY())){//cons2.inside(P2.getX() + stepx, P2.getY() + stepy)) {
 				P2.XStep(stepx);
 				P2.YStep(stepy);
 
