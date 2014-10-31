@@ -11,7 +11,7 @@ import io.netty.handler.logging.LoggingHandler;
 
 public class GameServerByJava {
 	static final int PORT = Integer
-			.parseInt(System.getProperty("port", "6666"));
+			.parseInt(System.getProperty("port", "8998"));
 
 	public static void main(String[] args) throws Exception {
 
