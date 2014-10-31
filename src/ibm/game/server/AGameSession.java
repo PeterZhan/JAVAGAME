@@ -348,7 +348,7 @@ public class AGameSession {
 		double d = Math.abs(a*target.x + b*target.y + c) / Math.sqrt(a*a + b*b);
 		
 		
-		if (d<=21)
+		if (d<=30)
 		{
 			fi.targeted = true;
 			fi.x1 = target.x; //(int) Math.round((-b*b*c -a*b*b*fi.x0-a*a*b*fi.y0)/(a*a- b*b)/a - c/a);
