@@ -292,6 +292,22 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
         
 
 	}
+	
+	public void setGameSize(ChannelHandlerContext ctx, String[] request) {
+		
+		String size[] = request[1].split(",");
+		
+		int width = Integer.parseInt(size[0]);
+		int height = Integer.parseInt(size[1]);
+		
+		Constraint c = new Constraint(21,21,width-21,height-42);
+		AGameSession.setCons1(c);
+		AGameSession.setCons2(c);
+		
+		
+		
+		
+	}
 
 	@Override
 	public void channelRead0(ChannelHandlerContext ctx, String msg)
@@ -323,6 +339,12 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		if (cmd.equals("JOIN")) {
 
 			JoinGame(ctx, request);
+
+		}
+		
+		if (cmd.equals("SIZE")) {
+
+			setGameSize(ctx, request);
 
 		}
 
