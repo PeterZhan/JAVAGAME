@@ -115,7 +115,7 @@ public class AGameSession {
 					* Math.cos(angle1 * Math.PI / 180.0));
 			int stepy = (int) Math.round(distance
 					* Math.sin(angle1 * Math.PI / 180.0));
-			if (!isCloseEnough(P1.getX() + stepx, P1.getY() + stepy, P2.getX(), P2.getY())){//cons1.inside(P1.getX() + stepx, P1.getY() + stepy)) {
+			if ((!isCloseEnough(P1.getX() + stepx, P1.getY() + stepy, P2.getX(), P2.getY())) && (cons1.inside(P1.getX() + stepx, P1.getY() + stepy))) {
 
 				P1.XStep(stepx);
 				P1.YStep(stepy);
@@ -132,7 +132,7 @@ public class AGameSession {
 					* Math.cos(angle2 * Math.PI / 180.0));
 			int stepy = (int) Math.round(distance
 					* Math.sin(angle2 * Math.PI / 180.0));
-			if (!isCloseEnough(P2.getX() + stepx, P2.getY() + stepy, P1.getX(), P1.getY())){//cons2.inside(P2.getX() + stepx, P2.getY() + stepy)) {
+			if ((!isCloseEnough(P2.getX() + stepx, P2.getY() + stepy, P1.getX(), P1.getY())) && (cons2.inside(P2.getX() + stepx, P2.getY() + stepy))) {
 				P2.XStep(stepx);
 				P2.YStep(stepy);
 
@@ -216,12 +216,8 @@ public class AGameSession {
 		    
 			if (c2 != null)
 			{
-			if ((angle1 >= 90 && angle1 <= 270) || (angle1 <= -90 && angle1 >= -270))
-			{
-			   
-				
-			}else
-			{
+			if (((P2.x - P1.x)*Math.cos(ra)>=0) && ((P2.y-P1.y)*Math.sin(ra)>=0))
+		     	{
 				
 			   shoot(1, fi);
 				
@@ -259,11 +255,7 @@ public class AGameSession {
 		    fi.x1 = (int)Math.round(fi.x0 + (1200) * Math.cos(ra));
 		    fi.y1 = (int)Math.round(fi.y0 + 5 + (1200) * Math.sin(ra));
 			
-			if ((angle2 <= 90 && angle2 >=-90) || angle2 <= -270 || angle2 >= 270)
-			{
-			   
-				
-			}else
+		    if (((P1.x - P2.x)*Math.cos(ra)>=0) && ((P1.y-P2.y)*Math.sin(ra)>=0))
 			{
 				
 				
