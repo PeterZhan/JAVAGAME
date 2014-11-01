@@ -219,8 +219,8 @@ public class AGameSession {
 		    
 		 
 		    double ra = angle1/180.0 * Math.PI;
-		    fi.x1 = (int)Math.round(fi.x0 + (1200) * Math.cos(ra));
-		    fi.y1 = (int)Math.round(fi.y0 + 5 + (1200) * Math.sin(ra));
+		    fi.x1 = (int)Math.round(fi.x0 + (2000) * Math.cos(ra));
+		    fi.y1 = (int)Math.round(fi.y0 + 5 + (2000) * Math.sin(ra));
 			
 		    
 			if (c2 != null)
@@ -261,8 +261,8 @@ public class AGameSession {
 		    
 		    
 		    double ra = angle2/180.0 * Math.PI;
-		    fi.x1 = (int)Math.round(fi.x0 + (1200) * Math.cos(ra));
-		    fi.y1 = (int)Math.round(fi.y0 + 5 + (1200) * Math.sin(ra));
+		    fi.x1 = (int)Math.round(fi.x0 + (2000) * Math.cos(ra));
+		    fi.y1 = (int)Math.round(fi.y0 + 5 + (2000) * Math.sin(ra));
 			
 		    if (((P1.x - P2.x)*Math.cos(ra)>=0) && ((P1.y-P2.y)*Math.sin(ra)>=0))
 			{
