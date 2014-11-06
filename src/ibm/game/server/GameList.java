@@ -30,7 +30,7 @@ public class GameList {
 
 			GameListByCH2.put(ch, game);
 			game.setC2(ch);
-
+            game.timer.start();
 			return gameid;
 
 		}
@@ -105,7 +105,7 @@ public class GameList {
 		GameListByCH1.remove(ch);
 		GameListByCH2.remove(ch2);
 		GameListByID.remove(gid);
-
+        if (game.timer.isRunning()) game.timer.stop();
 		game = null;
 
 	}
@@ -116,6 +116,7 @@ public class GameList {
 			GameListByCH2.remove(ch);
 			game.setC2(null);
 			game.channels.remove(ch);
+			if (game.timer.isRunning()) game.timer.stop();
 
 		}
 
@@ -151,6 +152,36 @@ public class GameList {
 
 		return p;
 	}
+	
+	
+	public synchronized Position moveAuto(String gameid, Channel ch) {
+		AGameSession game = GameListByID.get(gameid);
+		Position p = null;
+		if (game != null) {
+			p = game.MoveAuto(ch);
+
+		}
+
+		return p;
+	}
+	
+	
+	public synchronized void accelerate(String gameid, Channel ch, boolean isUp)
+	{
+		
+		AGameSession game = GameListByID.get(gameid);
+	
+		if (game != null) {
+			 game.accelerate(ch, isUp);
+
+		}
+		
+		
+		
+		
+	}
+	
+	
 
 	public synchronized int rotate(String gameid, Channel ch, int r) {
 		AGameSession game = GameListByID.get(gameid);

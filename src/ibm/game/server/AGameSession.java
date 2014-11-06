@@ -1,15 +1,20 @@
 package ibm.game.server;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
+
+import javax.swing.Timer;
 
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
-public class AGameSession {
+public class AGameSession  implements ActionListener {
 
 	static Random rd = new Random();
+	public Timer timer = new Timer(50, this);
 	final static int width = 1100;
 	final static int height = 630;
 	static Constraint cons1 = new Constraint(0,0,0,0);
@@ -23,13 +28,34 @@ public class AGameSession {
 	}
 
 
-	final static int step = 3;
+	//final static int step = 3;
 	final static int rotate = 10;
 
 	final String gameid;
 
 	Channel c1;
 	Channel c2;
+	
+	
+	private int step1 = 3;
+	private int step2 = 3;
+
+	public synchronized int getStep1() {
+		return step1;
+	}
+
+	public synchronized void setStep1(int step1) {
+		this.step1 = step1;
+	}
+
+	public synchronized int getStep2() {
+		return step2;
+	}
+
+	public synchronized void setStep2(int step2) {
+		this.step2 = step2;
+	}
+
 
 	Position P1 = new Position();
 	Position P2 = new Position();
@@ -116,10 +142,48 @@ public class AGameSession {
 		
 	}
 	
+	public void accelerate(Channel ch, boolean isUp)
+	{
+		if (ch == c1)
+		{
+		   int newSpeed = getStep1();	
+			
+		   if (isUp)
+		   {
+			   newSpeed++;
+		   }
+		   else
+		   {
+			   newSpeed--;
+		   }
+			
+		  if (newSpeed > -11 && newSpeed < 11)
+			 setStep1(newSpeed);
+			
+		}
+		
+		if (ch == c2)
+		{
+		   int newSpeed = getStep2();
+		   if (isUp)
+			   newSpeed++;
+		   else
+			   newSpeed--;
+			
+		   if (newSpeed > -11 && newSpeed < 11)
+				  setStep2(newSpeed);
+			
+		}
+		
+		
+	}
+	
+	
 	
 
 	public Position Move(Channel ch, int distance) {
 		if (ch == c1) {
+			
 			int stepx = (int) Math.round(distance
 					* Math.cos(angle1 * Math.PI / 180.0));
 			int stepy = (int) Math.round(distance
@@ -140,6 +204,46 @@ public class AGameSession {
 			int stepx = (int) Math.round(distance
 					* Math.cos(angle2 * Math.PI / 180.0));
 			int stepy = (int) Math.round(distance
+					* Math.sin(angle2 * Math.PI / 180.0));
+			if ((!isCloseEnough(P2.getX() + stepx, P2.getY() + stepy, P1.getX(), P1.getY()))  && (cons2.inside(P2.getX() + stepx, P2.getY() + stepy))) {
+				P2.XStep(stepx);
+				P2.YStep(stepy);
+
+				return P2;
+
+			} else
+				return null;
+
+		}
+
+		return null;
+
+	}
+	
+	
+	public Position MoveAuto(Channel ch) {
+		if (ch == c1) {
+			
+			int stepx = (int) Math.round(getStep1()
+					* Math.cos(angle1 * Math.PI / 180.0));
+			int stepy = (int) Math.round(getStep1()
+					* Math.sin(angle1 * Math.PI / 180.0));
+			if ((c2 != null &&!isCloseEnough(P1.getX() + stepx, P1.getY() + stepy, P2.getX(), P2.getY())) && (cons1.inside(P1.getX() + stepx, P1.getY() + stepy))) {
+
+				P1.XStep(stepx);
+				P1.YStep(stepy);
+
+				return P1;
+
+			} else
+				return null;
+
+		}
+
+		if (ch == c2) {
+			int stepx = (int) Math.round(getStep2()
+					* Math.cos(angle2 * Math.PI / 180.0));
+			int stepy = (int) Math.round(getStep2()
 					* Math.sin(angle2 * Math.PI / 180.0));
 			if ((!isCloseEnough(P2.getX() + stepx, P2.getY() + stepy, P1.getX(), P1.getY()))  && (cons2.inside(P2.getX() + stepx, P2.getY() + stepy))) {
 				P2.XStep(stepx);
@@ -191,6 +295,20 @@ public class AGameSession {
 	}
 	
 	public int sendBothMessage(String msg)
+	{
+		for (Channel c: channels) {
+            
+			    System.out.println("Sending message " + msg + " to " + c.toString());
+			
+                c.writeAndFlush(msg);
+            
+        }	
+		
+		return 0;
+	}
+	
+	
+	public int sendBothMessageAuto(String msg)
 	{
 		for (Channel c: channels) {
             
@@ -356,6 +474,29 @@ public class AGameSession {
 		
 		
 		}
+		
+		
+	}
+	
+	
+	public void actionPerformed(ActionEvent evt) {
+
+		 
+		String msg = "";
+		
+		if (MoveAuto(c1) != null)
+			msg += "POSITION:" + P1.getX() + "," + P1.getY() + ":" + 1
+					+ "\n";;
+	    if (MoveAuto(c2) != null)
+			msg += "POSITION:" + P2.getX() + "," + P2.getY() + ":" + 2
+								+ "\n";;
+		 
+		 
+		 
+		 
+		if (!msg.equals(""))
+			sendBothMessageAuto(msg);
+		
 		
 		
 	}

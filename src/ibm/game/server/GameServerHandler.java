@@ -112,7 +112,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 	public void Move(ChannelHandlerContext ctx, String[] request) {
 		String gameid = request[1];
-		Position newP = null;
+		//Position newP = null;
 		int newAngle = -1;
 		fireInfo fi = null;
 
@@ -133,7 +133,8 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 		case 38:
 
-			newP = gl.move(gameid, ctx.channel(), AGameSession.step);
+			//newP = gl.accelerate(gameid, ctx.channel(), true);//, AGameSession.step);
+			gl.accelerate(gameid, ctx.channel(), true);
 			break;
 
 		case 39:
@@ -143,7 +144,9 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 		case 40:
 
-			newP = gl.move(gameid, ctx.channel(), -AGameSession.step);
+			//newP = gl.accelerate(gameid, ctx.channel(), false);//, -AGameSession.step);
+			
+			gl.accelerate(gameid, ctx.channel(), false);
 			break;
 			
 		case 32:
@@ -155,7 +158,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		default:
 
 		}
-
+/*
 		if (newP != null) {
 
 			response = "POSITION:" + newP.getX() + "," + newP.getY() + ":" + id
@@ -166,7 +169,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 			gl.sendMessageForTwo(gameid, response);
 
 		}
-
+  */
 		if (newAngle != -1) {
 
 			response = "ANGLE:" + newAngle + ":" + id + "\n";
