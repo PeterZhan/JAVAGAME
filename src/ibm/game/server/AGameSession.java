@@ -11,14 +11,15 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
-public class AGameSession  implements ActionListener {
+public class AGameSession implements ActionListener {
 
 	static Random rd = new Random();
 	public Timer timer = new Timer(50, this);
 	final static int width = 1100;
 	final static int height = 630;
-	static Constraint cons1 = new Constraint(0,0,0,0);
-	static Constraint cons2 = new Constraint(0,0,0,0);
+	static Constraint cons1 = new Constraint(0, 0, 0, 0);
+	static Constraint cons2 = new Constraint(0, 0, 0, 0);
+
 	public static void setCons1(Constraint cons1) {
 		AGameSession.cons1 = cons1;
 	}
@@ -27,16 +28,14 @@ public class AGameSession  implements ActionListener {
 		AGameSession.cons2 = cons2;
 	}
 
-
-	//final static int step = 3;
+	// final static int step = 3;
 	final static int rotate = 10;
 
 	final String gameid;
 
 	Channel c1;
 	Channel c2;
-	
-	
+
 	private int step1 = 3;
 	private int step2 = 3;
 
@@ -56,19 +55,33 @@ public class AGameSession  implements ActionListener {
 		this.step2 = step2;
 	}
 
-
 	Position P1 = new Position();
 	Position P2 = new Position();
 
-	int angle1 = 0;
-	int angle2 = 180;
-	
-	
+	private int angle1 = 0;
+	private int angle2 = 180;
+
+	public synchronized int getAngle1() {
+		return angle1;
+	}
+
+	public synchronized void setAngle1(int angle1) {
+		this.angle1 = angle1;
+	}
+
+	public synchronized int getAngle2() {
+		return angle2;
+	}
+
+	public synchronized void setAngle2(int angle2) {
+		this.angle2 = angle2;
+	}
+
 	int fuel1 = 30;
 	int fuel2 = 30;
-	
-	
-	final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
+	final ChannelGroup channels = new DefaultChannelGroup(
+			GlobalEventExecutor.INSTANCE);
 
 	public Channel getC1() {
 		return c1;
@@ -128,67 +141,57 @@ public class AGameSession  implements ActionListener {
 		return 0;
 
 	}
-	
-	public boolean isCloseEnough(int x0, int y0, int x1, int y1)
-	{
-		
+
+	public boolean isCloseEnough(int x0, int y0, int x1, int y1) {
+
 		int d = 42;
-		
-		int distance = (int)Math.round((Math.sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0))));
-		
+
+		int distance = (int) Math.round((Math.sqrt((x1 - x0) * (x1 - x0)
+				+ (y1 - y0) * (y1 - y0))));
+
 		return distance <= d;
-		
-		
-		
+
 	}
-	
-	public void accelerate(Channel ch, boolean isUp)
-	{
-		if (ch == c1)
-		{
-		   int newSpeed = getStep1();	
-			
-		   if (isUp)
-		   {
-			   newSpeed++;
-		   }
-		   else
-		   {
-			   newSpeed--;
-		   }
-			
-		  if (newSpeed > -11 && newSpeed < 11)
-			 setStep1(newSpeed);
-			
+
+	public void accelerate(Channel ch, boolean isUp) {
+		if (ch == c1) {
+			int newSpeed = getStep1();
+
+			if (isUp) {
+				newSpeed++;
+			} else {
+				newSpeed--;
+			}
+
+			if (newSpeed > -9 && newSpeed < 9)
+				setStep1(newSpeed);
+
 		}
-		
-		if (ch == c2)
-		{
-		   int newSpeed = getStep2();
-		   if (isUp)
-			   newSpeed++;
-		   else
-			   newSpeed--;
-			
-		   if (newSpeed > -11 && newSpeed < 11)
-				  setStep2(newSpeed);
-			
+
+		if (ch == c2) {
+			int newSpeed = getStep2();
+			if (isUp)
+				newSpeed++;
+			else
+				newSpeed--;
+
+			if (newSpeed > -9 && newSpeed < 9)
+				setStep2(newSpeed);
+
 		}
-		
-		
+
 	}
-	
-	
-	
 
 	public Position Move(Channel ch, int distance) {
 		if (ch == c1) {
-			
+
 			int stepx = (int) Math.round(distance
 					* Math.cos(angle1 * Math.PI / 180.0));
 			int stepy = (int) Math.round(distance
 					* Math.sin(angle1 * Math.PI / 180.0));
-			if ((c2 != null &&!isCloseEnough(P1.getX() + stepx, P1.getY() + stepy, P2.getX(), P2.getY())) && (cons1.inside(P1.getX() + stepx, P1.getY() + stepy))) {
+			if ((c2 != null && !isCloseEnough(P1.getX() + stepx, P1.getY()
+					+ stepy, P2.getX(), P2.getY()))
+					&& (cons1.inside(P1.getX() + stepx, P1.getY() + stepy))) {
 
 				P1.XStep(stepx);
 				P1.YStep(stepy);
@@ -205,7 +208,9 @@ public class AGameSession  implements ActionListener {
 					* Math.cos(angle2 * Math.PI / 180.0));
 			int stepy = (int) Math.round(distance
 					* Math.sin(angle2 * Math.PI / 180.0));
-			if ((!isCloseEnough(P2.getX() + stepx, P2.getY() + stepy, P1.getX(), P1.getY()))  && (cons2.inside(P2.getX() + stepx, P2.getY() + stepy))) {
+			if ((!isCloseEnough(P2.getX() + stepx, P2.getY() + stepy,
+					P1.getX(), P1.getY()))
+					&& (cons2.inside(P2.getX() + stepx, P2.getY() + stepy))) {
 				P2.XStep(stepx);
 				P2.YStep(stepy);
 
@@ -219,16 +224,17 @@ public class AGameSession  implements ActionListener {
 		return null;
 
 	}
-	
-	
+
 	public Position MoveAuto(Channel ch) {
 		if (ch == c1) {
-			
+
 			int stepx = (int) Math.round(getStep1()
 					* Math.cos(angle1 * Math.PI / 180.0));
 			int stepy = (int) Math.round(getStep1()
 					* Math.sin(angle1 * Math.PI / 180.0));
-			if ((c2 != null &&!isCloseEnough(P1.getX() + stepx, P1.getY() + stepy, P2.getX(), P2.getY())) && (cons1.inside(P1.getX() + stepx, P1.getY() + stepy))) {
+			if ((c2 != null && !isCloseEnough(P1.getX() + stepx, P1.getY()
+					+ stepy, P2.getX(), P2.getY()))
+					&& (cons1.inside(P1.getX() + stepx, P1.getY() + stepy))) {
 
 				P1.XStep(stepx);
 				P1.YStep(stepy);
@@ -245,7 +251,9 @@ public class AGameSession  implements ActionListener {
 					* Math.cos(angle2 * Math.PI / 180.0));
 			int stepy = (int) Math.round(getStep2()
 					* Math.sin(angle2 * Math.PI / 180.0));
-			if ((!isCloseEnough(P2.getX() + stepx, P2.getY() + stepy, P1.getX(), P1.getY()))  && (cons2.inside(P2.getX() + stepx, P2.getY() + stepy))) {
+			if ((!isCloseEnough(P2.getX() + stepx, P2.getY() + stepy,
+					P1.getX(), P1.getY()))
+					&& (cons2.inside(P2.getX() + stepx, P2.getY() + stepy))) {
 				P2.XStep(stepx);
 				P2.YStep(stepy);
 
@@ -263,7 +271,7 @@ public class AGameSession  implements ActionListener {
 	public int rotate(Channel ch, int r) {
 		if (ch == c1) {
 			angle1 += r;
-            angle1 %= 360;
+			angle1 %= 360;
 			return angle1;
 
 		}
@@ -272,6 +280,25 @@ public class AGameSession  implements ActionListener {
 			angle2 += r;
 			angle2 %= 360;
 			return angle2;
+
+		}
+
+		return 0;
+
+	}
+
+	public int rotateAuto(Channel ch, int r) {
+		if (ch == c1) {
+			int newangle = (this.getAngle1() + r) % 360;
+			this.setAngle1(newangle);
+			return newangle;
+
+		}
+
+		if (ch == c2) {
+			int newangle = (this.getAngle2() + r) % 360;
+			this.setAngle2(newangle);
+			return newangle;
 
 		}
 
@@ -293,121 +320,100 @@ public class AGameSession  implements ActionListener {
 
 		return 0;
 	}
-	
-	public int sendBothMessage(String msg)
-	{
-		for (Channel c: channels) {
-            
-			    System.out.println("Sending message " + msg + " to " + c.toString());
-			
-                c.writeAndFlush(msg);
-            
-        }	
-		
+
+	public int sendBothMessage(String msg) {
+		for (Channel c : channels) {
+
+			System.out
+					.println("Sending message " + msg + " to " + c.toString());
+
+			c.writeAndFlush(msg);
+
+		}
+
 		return 0;
 	}
-	
-	
-	public int sendBothMessageAuto(String msg)
-	{
-		for (Channel c: channels) {
-            
-			    System.out.println("Sending message " + msg + " to " + c.toString());
-			
-                c.writeAndFlush(msg);
-            
-        }	
-		
+
+	public int sendBothMessageAuto(String msg) {
+		for (Channel c : channels) {
+
+			System.out
+					.println("Sending message " + msg + " to " + c.toString());
+
+			c.writeAndFlush(msg);
+
+		}
+
 		return 0;
 	}
-	
-	public fireInfo fire(Channel ch){
-		
+
+	public fireInfo fire(Channel ch) {
+
 		fireInfo fi = null;
-		
-		if (ch == c1 ) {
-			
+
+		if (ch == c1) {
+
 			fi = new fireInfo();
 			fi.part = 1;
-			fi.x0 = P1.x + (int) Math.round(21
-					* Math.cos(angle1 * Math.PI / 180.0));
-		    fi.y0 = P1.y + (int) Math.round(21
-					* Math.sin(angle1 * Math.PI / 180.0)) + 5;
-		    
-		    
-		 
-		    double ra = angle1/180.0 * Math.PI;
-		    fi.x1 = (int)Math.round(fi.x0 + (2000) * Math.cos(ra));
-		    fi.y1 = (int)Math.round(fi.y0 + 5 + (2000) * Math.sin(ra));
-			
-		    
-			if (c2 != null)
-			{
-			if (((P2.x - P1.x)*Math.cos(ra)>=0) && ((P2.y-P1.y)*Math.sin(ra)>=0))
-		     	{
-				
-			   shoot(1, fi);
-				
-			   if (fi.targeted)
-			   {
-				   fuel2 --;
-				   fi.fule = fuel2;
-			   }
-				
-				  
+			fi.x0 = P1.x
+					+ (int) Math.round(21 * Math.cos(angle1 * Math.PI / 180.0));
+			fi.y0 = P1.y
+					+ (int) Math.round(21 * Math.sin(angle1 * Math.PI / 180.0))
+					+ 5;
+
+			double ra = angle1 / 180.0 * Math.PI;
+			fi.x1 = (int) Math.round(fi.x0 + (2000) * Math.cos(ra));
+			fi.y1 = (int) Math.round(fi.y0 + 5 + (2000) * Math.sin(ra));
+
+			if (c2 != null) {
+				if (((P2.x - P1.x) * Math.cos(ra) >= 0)
+						&& ((P2.y - P1.y) * Math.sin(ra) >= 0)) {
+
+					shoot(1, fi);
+
+					if (fi.targeted) {
+						fuel2--;
+						fi.fule = fuel2;
+					}
+
+				}
+
 			}
-			
-			}
-			
-			
-			
-			
-			
 
 		}
 
 		if (ch == c2) {
-			
+
 			fi = new fireInfo();
 			fi.part = 2;
-			fi.x0 = P2.x + (int) Math.round(21
-					* Math.cos(angle2 * Math.PI / 180.0));
-		    fi.y0 = P2.y + (int) Math.round(21
-					* Math.sin(angle2 * Math.PI / 180.0)) + 5;
-		    
-		    
-		    
-		    
-		    double ra = angle2/180.0 * Math.PI;
-		    fi.x1 = (int)Math.round(fi.x0 + (2000) * Math.cos(ra));
-		    fi.y1 = (int)Math.round(fi.y0 + 5 + (2000) * Math.sin(ra));
-			
-		    if (((P1.x - P2.x)*Math.cos(ra)>=0) && ((P1.y-P2.y)*Math.sin(ra)>=0))
-			{
-				
-				
+			fi.x0 = P2.x
+					+ (int) Math.round(21 * Math.cos(angle2 * Math.PI / 180.0));
+			fi.y0 = P2.y
+					+ (int) Math.round(21 * Math.sin(angle2 * Math.PI / 180.0))
+					+ 5;
+
+			double ra = angle2 / 180.0 * Math.PI;
+			fi.x1 = (int) Math.round(fi.x0 + (2000) * Math.cos(ra));
+			fi.y1 = (int) Math.round(fi.y0 + 5 + (2000) * Math.sin(ra));
+
+			if (((P1.x - P2.x) * Math.cos(ra) >= 0)
+					&& ((P1.y - P2.y) * Math.sin(ra) >= 0)) {
+
 				shoot(2, fi);
-				
-				if (fi.targeted)
-				{
-					   fuel1 --;
-					   fi.fule = fuel1;
+
+				if (fi.targeted) {
+					fuel1--;
+					fi.fule = fuel1;
 				}
-				
+
 			}
-			
-			
-			
-			
 
 		}
-		
+
 		return fi;
-		
-		
+
 	}
-	
-	
+
 	public int getFuel1() {
 		return fuel1;
 	}
@@ -424,83 +430,74 @@ public class AGameSession  implements ActionListener {
 		this.fuel2 = fuel2;
 	}
 
-	public void shoot(int part, fireInfo fi)
-	{
-		
-		if (part == 1)
-		{
-			
+	public void shoot(int part, fireInfo fi) {
+
+		if (part == 1) {
+
 			distance(fi, angle1, P2);
-			
-			
-			
-			
+
 		}
-		
-		
-		if (part == 2)
-		{
-			
+
+		if (part == 2) {
+
 			distance(fi, angle2, P1);
-			
-			
-			
-			
+
 		}
-		
-		
+
 	}
-	
-	
-	public void distance(fireInfo fi, int angle, Position target)
-	{
-		//double d = Math.sqrt((target.x - fi.x0)*(target.x - fi.x0) +
-		//		          (target.y - fi.y0)*(target.y - fi.y0));
-		
-		double ra = angle/180.0 * Math.PI;
-		
+
+	public void distance(fireInfo fi, int angle, Position target) {
+		// double d = Math.sqrt((target.x - fi.x0)*(target.x - fi.x0) +
+		// (target.y - fi.y0)*(target.y - fi.y0));
+
+		double ra = angle / 180.0 * Math.PI;
+
 		double a = Math.sin(ra);
 		double b = -Math.cos(ra);
-		double c= fi.y0 * Math.cos(ra) - fi.x0 * Math.sin(ra);
-		
-		double d = Math.abs(a*target.x + b*target.y + c) / Math.sqrt(a*a + b*b);
-		
-		
-		if (d<=30)
-		{
+		double c = fi.y0 * Math.cos(ra) - fi.x0 * Math.sin(ra);
+
+		double d = Math.abs(a * target.x + b * target.y + c)
+				/ Math.sqrt(a * a + b * b);
+
+		if (d <= 30) {
 			fi.targeted = true;
-			fi.x1 = target.x; //(int) Math.round((-b*b*c -a*b*b*fi.x0-a*a*b*fi.y0)/(a*a- b*b)/a - c/a);
-			fi.y1 = target.y; //(int) Math.round((b*c + a*b*fi.x0 + a * a * fi.y0)/(a*a - b*b)); 
-		
-		
+			fi.x1 = target.x; // (int) Math.round((-b*b*c
+								// -a*b*b*fi.x0-a*a*b*fi.y0)/(a*a- b*b)/a -
+								// c/a);
+			fi.y1 = target.y; // (int) Math.round((b*c + a*b*fi.x0 + a * a *
+								// fi.y0)/(a*a - b*b));
+
 		}
-		
-		
+
 	}
-	
-	
+
 	public void actionPerformed(ActionEvent evt) {
 
-		 
 		String msg = "";
-		
+
 		if (MoveAuto(c1) != null)
-			msg += "POSITION:" + P1.getX() + "," + P1.getY() + ":" + 1
-					+ "\n";;
-	    if (MoveAuto(c2) != null)
-			msg += "POSITION:" + P2.getX() + "," + P2.getY() + ":" + 2
-								+ "\n";;
-		 
-		 
-		 
-		 
+			msg += "POSITION:" + P1.getX() + "," + P1.getY() + ":" + 1 + "\n";
+		else {
+			if (c1 != null) {
+				rotateAuto(c1, 5);
+				msg += "ANGLE:" + this.getAngle1() + ":" + 1 + "\n";
+			}
+
+		}
+
+		if (MoveAuto(c2) != null)
+			msg += "POSITION:" + P2.getX() + "," + P2.getY() + ":" + 2 + "\n";
+		else {
+			if (c2 != null) {
+				rotateAuto(c2, 5);
+				msg += "ANGLE:" + this.getAngle2() + ":" + 2 + "\n";
+			}
+
+		}
+
 		if (!msg.equals(""))
 			sendBothMessageAuto(msg);
-		
-		
-		
+
 	}
-	
-	
 
 }

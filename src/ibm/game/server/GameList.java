@@ -235,7 +235,7 @@ public class GameList {
 		
 		if (game != null)
 		{
-			return game.angle1;
+			return game.getAngle1();
 			
 		}
 			
