@@ -114,6 +114,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		String gameid = request[1];
 		//Position newP = null;
 		int newAngle = -1;
+		int newSpeed = -100;
 		fireInfo fi = null;
 
 		Channel ch = ctx.channel();
@@ -134,7 +135,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		case 38:
 
 			//newP = gl.accelerate(gameid, ctx.channel(), true);//, AGameSession.step);
-			gl.accelerate(gameid, ctx.channel(), true);
+			newSpeed = gl.accelerate(gameid, ctx.channel(), true);
 			break;
 
 		case 39:
@@ -146,7 +147,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 			//newP = gl.accelerate(gameid, ctx.channel(), false);//, -AGameSession.step);
 			
-			gl.accelerate(gameid, ctx.channel(), false);
+			newSpeed = gl.accelerate(gameid, ctx.channel(), false);
 			break;
 			
 		case 32:
@@ -170,6 +171,17 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 		}
   */
+		if (newSpeed != -100) {
+
+			response = "SPEED:" + newSpeed + ":" + id + "\n";
+			System.out.println(response);
+
+			gl.sendMessageForTwo(gameid, response);
+			//ctx.writeAndFlush(response);
+
+		}
+		
+		
 		if (newAngle != -1) {
 
 			response = "ANGLE:" + newAngle + ":" + id + "\n";
@@ -192,6 +204,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 				 {
 					 response = "SCORE:" + fi.fule + ":2\n";
 					 gl.sendMessageForTwo(gameid, response);
+					 
 				 }
 				
 				 if (fi.part == 2)
@@ -200,7 +213,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 					 gl.sendMessageForTwo(gameid, response);
 				 }
 				
-				
+				 if (fi.fule == 0) gl.stopGameTimer(gameid);
 			}
 			
 			

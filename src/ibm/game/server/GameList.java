@@ -105,7 +105,7 @@ public class GameList {
 		GameListByCH1.remove(ch);
 		GameListByCH2.remove(ch2);
 		GameListByID.remove(gid);
-        if (game.timer.isRunning()) game.timer.stop();
+        game.timer.stop();
 		game = null;
 
 	}
@@ -116,7 +116,7 @@ public class GameList {
 			GameListByCH2.remove(ch);
 			game.setC2(null);
 			game.channels.remove(ch);
-			if (game.timer.isRunning()) game.timer.stop();
+			game.timer.stop();
 
 		}
 
@@ -166,17 +166,17 @@ public class GameList {
 	}
 	
 	
-	public synchronized void accelerate(String gameid, Channel ch, boolean isUp)
+	public synchronized int accelerate(String gameid, Channel ch, boolean isUp)
 	{
 		
 		AGameSession game = GameListByID.get(gameid);
 	
 		if (game != null) {
-			 game.accelerate(ch, isUp);
+			return game.accelerate(ch, isUp);
 
 		}
 		
-		
+		return -100;
 		
 		
 	}
@@ -215,6 +215,17 @@ public class GameList {
 
 		return 0;
 	}
+	public synchronized void stopGameTimer(String gameid) {
+		AGameSession game = GameListByID.get(gameid);
+
+		if (game != null) {
+			game.timer.stop();
+
+		}
+
+		
+	}
+	
 	
 	public synchronized Position getMainPostion(String gameid)
 	{

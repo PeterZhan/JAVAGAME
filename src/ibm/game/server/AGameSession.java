@@ -108,10 +108,10 @@ public class AGameSession implements ActionListener {
 	public AGameSession() {
 		gameid = "" + rd.nextInt(10000);
 
-		P1.setX(rd.nextInt(160) + 10);
+		P1.setX(rd.nextInt(160) + 50);
 		P1.setY(rd.nextInt(500) + 50);
 
-		P2.setX(rd.nextInt(160) + 610);
+		P2.setX(rd.nextInt(160) + 810);
 		P2.setY(rd.nextInt(500) + 50);
 
 	}
@@ -153,9 +153,11 @@ public class AGameSession implements ActionListener {
 
 	}
 
-	public void accelerate(Channel ch, boolean isUp) {
+	public int accelerate(Channel ch, boolean isUp) {
+		
+		int newSpeed = -100;
 		if (ch == c1) {
-			int newSpeed = getStep1();
+			newSpeed = getStep1();
 
 			if (isUp) {
 				newSpeed++;
@@ -163,22 +165,31 @@ public class AGameSession implements ActionListener {
 				newSpeed--;
 			}
 
-			if (newSpeed > -9 && newSpeed < 9)
+			if (newSpeed > -10 && newSpeed < 10)
+			{
 				setStep1(newSpeed);
+				return newSpeed;
+				
+			}
 
 		}
 
 		if (ch == c2) {
-			int newSpeed = getStep2();
+			newSpeed = getStep2();
 			if (isUp)
 				newSpeed++;
 			else
 				newSpeed--;
 
-			if (newSpeed > -9 && newSpeed < 9)
+			if (newSpeed > -10 && newSpeed < 10)
+			{
 				setStep2(newSpeed);
+				return newSpeed;
+			    	
+			}
 
 		}
+		return -100;
 
 	}
 
@@ -478,7 +489,7 @@ public class AGameSession implements ActionListener {
 		if (MoveAuto(c1) != null)
 			msg += "POSITION:" + P1.getX() + "," + P1.getY() + ":" + 1 + "\n";
 		else {
-			if (c1 != null) {
+			if (c1 != null && c2!= null) {
 				rotateAuto(c1, 5);
 				msg += "ANGLE:" + this.getAngle1() + ":" + 1 + "\n";
 			}
