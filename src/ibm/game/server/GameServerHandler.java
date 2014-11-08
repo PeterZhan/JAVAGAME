@@ -316,7 +316,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		int width = Integer.parseInt(size[0]);
 		int height = Integer.parseInt(size[1]);
 		
-		Constraint c = new Constraint(21,21,width-21,height-42);
+		Constraint c = new Constraint(21,21,width-21,height-63);
 		AGameSession.setCons1(c);
 		AGameSession.setCons2(c);
 		
